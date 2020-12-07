@@ -14,10 +14,12 @@ public:
     this->n = n;
     data = new T[n];
   }  
-  // copy constructor
+  // copy constructor, deep copy
   dynamic_array(const dynamic_array<T> &other) {
     std::cout << "copy constructor is called" << std::endl;
+    //data = other;
     n = other.n;
+    data = new T[n];
     for (int i = 1; i < n; i++) {
       data[i] = other[i];
     }
@@ -25,7 +27,7 @@ public:
   // destructor
   ~dynamic_array(){
     delete [] data;
-    std::cout << "\nDestructor freezing data!" << std::endl;
+    std::cout << "\nDestructor called!" << std::endl;
   }
   //methods
   T &operator[](int index) {
@@ -67,6 +69,7 @@ public:
 int main() {
   
   dynamic_array < int> arr{5};
+  dynamic_array <int> arr1{arr};
   std::cout << arr.at(4) << std::endl;
   std::cout << arr.size()<< std::endl;
   for (auto v : arr) {
