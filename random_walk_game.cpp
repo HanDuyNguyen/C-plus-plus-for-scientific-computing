@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <ctime>
 
@@ -18,44 +19,61 @@ int main(){
     bool invalid = false;
     srand(time(0));
     
-    do{
+    ofstream myfile;
     cout << "Please enter your capital: ";
+    
+    do{
     cin >> S;
-    cout << endl;
+    if (S <= 0){
+        cout << "-------------------------------------------------------------"<< endl;
+        cout << "Your capital must be positive! Please re-enter your capital: ";
+    }
     }
     while(S <= 0);
+    cout << endl;
+    cout << "*************************************************************"<< endl;
     
-    
-    
+    int flag = 0;
     do{
-        cout << "Please enter number of rounds you want to play: ";
+        cout << endl;
+        if (flag == 0){
+            cout << "Excellent! Please enter number of rounds you want to play: ";
+        }
+        else{
+            cout << "Please re-enter number of rounds you want to play: ";
+        }
         cin >> rounds;
         
         if (rounds <= 0){
+            flag++;
             cout << "Invalid input!" << endl;
-            cout << "************************" << endl;
+            cout << "-------------------------------------------------------------"<< endl; 
             invalid = true;
         }
         else{
-            cout << "Valid input" << endl; 
-            cout << "***********************" << endl;
+            cout << "Valid input!" << endl; 
+            cout << "-------------------------------------------------------------"<< endl;
             invalid = false;
-            
+            myfile.open ("amount.csv");
+            myfile << "Round" << ";" <<"Amount" << endl;
+            myfile << 0 << ";" << S << endl;
             int i = 1;
             while (i <= rounds && S > 0){
                 random_number = generate_random();
                 S += random_number;
+                myfile << i << ";" << S << endl;
                 if (random_number == -1){
-                    current_state = "loss";
+                    current_state = "L";
                     total_loss++;
                 }   
                 else{
-                    current_state = "win";
+                    current_state = "W";
                     total_win++;
                 }
                 cout << "Round " << i << ": \t" << current_state << "\t S = " << S << "\t\t total_win = "<< total_win << "\t\t total_loss = " << total_loss << endl;
                 i++;
             }
+            myfile.close();
             cout << "Total played rounds  = " << i-1 << endl;
         }
     }
